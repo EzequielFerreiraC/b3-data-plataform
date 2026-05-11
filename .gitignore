@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.env
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data layers (keep folder structure, ignore data files)
+data/bronze/*
+data/silver/*
+data/gold/*
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
+
+# Logs
+logs/*.log
+logs/*.json
+!logs/.gitkeep
+
+# Delta Lake checkpoints
+_delta_log/
+
+# Spark
+derby.log
+metastore_db/
+spark-warehouse/
+
+# Airflow
+airflow.db
+airflow.cfg
+airflow-webserver.pid
+/airflow/logs/
+
+# MinIO
+minio-data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env vars
+.env
+.env.*
+!.env.example
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
