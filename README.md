@@ -1,32 +1,6 @@
 # B3 Data Platform
 
-> Financial data lakehouse for B3 (Brazilian Stock Exchange) using the **Medallion Architecture** (Bronze → Silver → Gold).
-
----
-
-## Architecture
-
-```
-Yahoo Finance API / BRAPI
-         │
-         ▼
-┌─────────────────────┐
-│   BRONZE  (raw)     │  Parquet, partitioned by trade_date
-│  No transformation  │  Source + ingested_at metadata only
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   SILVER  (clean)   │  Parquet, ACID via Delta Lake
-│  ETL + validation   │  Deduplicated, typed, daily_return
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   GOLD  (analytics) │  Parquet/Delta, pre-aggregated
-│  Ready to consume   │  Volatility, cumulative return, monthly OHLC
-└─────────────────────┘
-```
+> Financial data lakehouse for B3 (Brazilian Stock Exchange) using the **Medallion Architecture** (Bronze -> Silver -> Gold).
 
 ---
 
@@ -144,15 +118,3 @@ Override via `DEFAULT_TICKERS` in `configs/settings.py` or pass a custom list to
 
 ---
 
-## Commit History
-
-```
-Feat: Jupyter notebooks ...
-Feat: Airflow DAGs ...
-Feat: Gold layer ...
-Feat: Silver layer ...
-Feat: Bronze layer ...
-Feat: Settings, Spark config, MinIO client, JSON logger and domain schemas
-Chore: Project scaffold, directory structure and base dependencies
-OK: Add: ReadmeProject
-```
