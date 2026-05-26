@@ -35,6 +35,12 @@ def _safe_download(ticker: str, start: date, end: date) -> pl.DataFrame | None:
         if hasattr(raw.columns, "levels"):
             raw.columns = [c[0] if isinstance(c, tuple) else c for c in raw.columns]
 
+        # yfinance versions differ on the date column name after reset_index()
+        if "Date" not in raw.columns and "index" in raw.columns:
+            raw = raw.rename(columns={"index": "Date"})
+        if "Date" not in raw.columns and "Datetime" in raw.columns:
+            raw = raw.rename(columns={"Datetime": "Date"})
+
         df = pl.from_pandas(raw).with_columns(
             pl.lit(ticker).alias("ticker"),
             pl.col("Date").cast(pl.Date).alias("trade_date"),

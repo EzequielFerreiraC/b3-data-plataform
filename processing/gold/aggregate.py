@@ -95,6 +95,10 @@ def build_monthly_returns(df: pl.DataFrame) -> pl.DataFrame:
     Monthly OHLC-style aggregation per ticker:
     uses first open and last close of each month.
     """
+    df = df.with_columns(
+        pl.col("trade_date").dt.year().alias("year"),
+        pl.col("trade_date").dt.month().alias("month"),
+    )
     return (
         df
         .sort(["ticker", "trade_date"])
