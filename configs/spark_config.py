@@ -16,6 +16,14 @@ def create_spark_session(app_name: str = SPARK_APP_NAME) -> SparkSession:
     - Adaptive Query Execution (AQE)
     - Correct date rebase mode for Parquet
     """
+    # If a previous session was stopped, getOrCreate() would return the dead
+    # instance instead of creating a new one.  Clear the stale reference first.
+    _cached = SparkSession._instantiatedSession
+    if _cached is not None:
+        _sess = _cached() if callable(_cached) else _cached
+        if _sess is not None and _sess.sparkContext._jsc is None:
+            SparkSession._instantiatedSession = None
+
     return (
         SparkSession.builder
         .appName(app_name)
