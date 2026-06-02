@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from pyspark.sql import SparkSession
 
-from configs.settings import SPARK_APP_NAME, SPARK_MASTER
+from a_configs.settings import SPARK_APP_NAME, SPARK_MASTER
 
 
 def create_spark_session(app_name: str = SPARK_APP_NAME) -> SparkSession:

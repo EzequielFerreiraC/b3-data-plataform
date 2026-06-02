@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 import polars as pl
 
-from configs.logger import get_logger
+from a_configs.logger import get_logger
 from processing.bronze.ingest import read_bronze
 from processing.silver.transform import transform_silver, write_silver
 from validation.quality_checks import run_silver_quality_checks

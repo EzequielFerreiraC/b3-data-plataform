@@ -6,7 +6,7 @@ from __future__ import annotations
 import boto3
 from botocore.exceptions import ClientError
 
-from configs.settings import MINIO_ACCESS_KEY, MINIO_ENDPOINT, MINIO_SECRET_KEY
+from a_configs.settings import MINIO_ACCESS_KEY, MINIO_ENDPOINT, MINIO_SECRET_KEY
 
 
 def get_s3_client():

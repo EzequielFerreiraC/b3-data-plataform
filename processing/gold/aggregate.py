@@ -12,8 +12,8 @@ from pathlib import Path
 
 import polars as pl
 
-from configs.logger import get_logger
-from configs.settings import DATA_PATH_GOLD
+from a_configs.logger import get_logger
+from a_configs.settings import DATA_PATH_GOLD
 
 logger = get_logger(__name__)
 

@@ -8,8 +8,8 @@ from datetime import date, timedelta
 
 import polars as pl
 
-from configs.logger import get_logger
-from configs.settings import DEFAULT_TICKERS
+from a_configs.logger import get_logger
+from a_configs.settings import DEFAULT_TICKERS
 from ingestion.yahoo_finance import fetch_daily_prices
 from processing.bronze.ingest import write_bronze
 

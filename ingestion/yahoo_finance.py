@@ -10,8 +10,8 @@ from datetime import date, timedelta
 import polars as pl
 import yfinance as yf
 
-from configs.logger import get_logger
-from configs.settings import DEFAULT_TICKERS
+from a_configs.logger import get_logger
+from a_configs.settings import DEFAULT_TICKERS
 
 logger = get_logger(__name__)
 

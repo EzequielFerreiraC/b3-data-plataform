@@ -10,7 +10,7 @@ import polars as pl
 import pytest
 
 from processing.bronze.ingest import write_bronze, read_bronze
-import configs.settings as settings
+import a_configs.settings as settings
 
 
 # ---------------------------------------------------------------------------

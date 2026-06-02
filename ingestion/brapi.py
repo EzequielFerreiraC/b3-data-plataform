@@ -11,8 +11,8 @@ from typing import Any
 import polars as pl
 import requests
 
-from configs.logger import get_logger
-from configs.settings import B3_API_TOKEN
+from a_configs.logger import get_logger
+from a_configs.settings import B3_API_TOKEN
 
 logger = get_logger(__name__)
 

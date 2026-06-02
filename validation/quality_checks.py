@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import polars as pl
 
-from configs.logger import get_logger
+from a_configs.logger import get_logger
 
 logger = get_logger(__name__)
 

@@ -1,7 +1,7 @@
 """
 Structured JSON logger factory.
 Usage:
-    from configs.logger import get_logger
+    from a_configs.logger import get_logger
     logger = get_logger(__name__)
     logger.info("Pipeline started", extra={"rows": 1500, "date": "2024-01-02"})
 """
