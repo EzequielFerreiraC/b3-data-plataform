@@ -11,7 +11,7 @@ import polars as pl
 from a_configs.logger import get_logger
 from a_configs.settings import DEFAULT_TICKERS
 from c_ingestion.yahoo_finance import fetch_daily_prices
-from processing.bronze.ingest import write_bronze
+from d_processing.bronze.ingest import write_bronze
 
 logger = get_logger(__name__)
 

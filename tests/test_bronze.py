@@ -9,7 +9,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from processing.bronze.ingest import write_bronze, read_bronze
+from d_processing.bronze.ingest import write_bronze, read_bronze
 import a_configs.settings as settings
 
 
@@ -21,7 +21,7 @@ import a_configs.settings as settings
 def test_write_bronze_creates_parquet_files(raw_df, tmp_path, monkeypatch):
     monkeypatch.setattr(settings, "DATA_PATH_BRONZE", tmp_path / "bronze")
 
-    from processing.bronze import ingest as _module
+    from d_processing.bronze import ingest as _module
     monkeypatch.setattr(_module, "DATA_PATH_BRONZE", tmp_path / "bronze")
 
     out = write_bronze(raw_df, source="test_src")
@@ -31,7 +31,7 @@ def test_write_bronze_creates_parquet_files(raw_df, tmp_path, monkeypatch):
 
 def test_write_bronze_adds_metadata_columns(raw_df, tmp_path, monkeypatch):
     monkeypatch.setattr(settings, "DATA_PATH_BRONZE", tmp_path / "bronze")
-    from processing.bronze import ingest as _module
+    from d_processing.bronze import ingest as _module
     monkeypatch.setattr(_module, "DATA_PATH_BRONZE", tmp_path / "bronze")
 
     write_bronze(raw_df, source="test_src")
@@ -43,7 +43,7 @@ def test_write_bronze_adds_metadata_columns(raw_df, tmp_path, monkeypatch):
 
 
 def test_write_bronze_partitions_by_trade_date(raw_df, tmp_path, monkeypatch):
-    from processing.bronze import ingest as _module
+    from d_processing.bronze import ingest as _module
     monkeypatch.setattr(_module, "DATA_PATH_BRONZE", tmp_path / "bronze")
 
     write_bronze(raw_df, source="test_src")
@@ -53,7 +53,7 @@ def test_write_bronze_partitions_by_trade_date(raw_df, tmp_path, monkeypatch):
 
 
 def test_write_bronze_empty_df_is_noop(tmp_path, monkeypatch):
-    from processing.bronze import ingest as _module
+    from d_processing.bronze import ingest as _module
     monkeypatch.setattr(_module, "DATA_PATH_BRONZE", tmp_path / "bronze")
 
     empty = pl.DataFrame()
@@ -67,7 +67,7 @@ def test_write_bronze_empty_df_is_noop(tmp_path, monkeypatch):
 
 
 def test_read_bronze_returns_all_rows(raw_df, tmp_path, monkeypatch):
-    from processing.bronze import ingest as _module
+    from d_processing.bronze import ingest as _module
     monkeypatch.setattr(_module, "DATA_PATH_BRONZE", tmp_path / "bronze")
 
     write_bronze(raw_df, source="test_src")
@@ -77,7 +77,7 @@ def test_read_bronze_returns_all_rows(raw_df, tmp_path, monkeypatch):
 
 
 def test_read_bronze_missing_path_returns_empty(tmp_path, monkeypatch):
-    from processing.bronze import ingest as _module
+    from d_processing.bronze import ingest as _module
     monkeypatch.setattr(_module, "DATA_PATH_BRONZE", tmp_path / "bronze")
 
     result = read_bronze(source="nonexistent")

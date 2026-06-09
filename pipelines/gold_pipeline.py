@@ -8,13 +8,13 @@ from dataclasses import dataclass
 import polars as pl
 
 from a_configs.logger import get_logger
-from processing.gold.aggregate import (
+from d_processing.gold.aggregate import (
     build_daily_metrics,
     build_monthly_returns,
     build_portfolio_summary,
     write_gold,
 )
-from processing.silver.transform import read_silver
+from d_processing.silver.transform import read_silver
 
 logger = get_logger(__name__)
 
