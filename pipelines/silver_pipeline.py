@@ -10,7 +10,7 @@ import polars as pl
 from a_configs.logger import get_logger
 from d_processing.bronze.ingest import read_bronze
 from d_processing.silver.transform import transform_silver, write_silver
-from validation.quality_checks import run_silver_quality_checks
+from e_validation.quality_checks import run_silver_quality_checks
 
 logger = get_logger(__name__)
 
