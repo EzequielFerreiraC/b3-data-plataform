@@ -21,7 +21,7 @@ DEFAULT_ARGS = {
 
 def run_silver_pipeline(**context) -> None:
     from datetime import date
-    from pipelines.silver_pipeline import SilverPipeline, SilverPipelineConfig
+    from f_pipelines.silver_pipeline import SilverPipeline, SilverPipelineConfig
 
     logical_date: date = context["logical_date"].date()
     cfg = SilverPipelineConfig(trade_date=str(logical_date))

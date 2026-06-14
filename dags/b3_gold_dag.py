@@ -21,7 +21,7 @@ DEFAULT_ARGS = {
 
 def run_gold_pipeline(**context) -> None:
     from datetime import date
-    from pipelines.gold_pipeline import GoldPipeline, GoldPipelineConfig
+    from f_pipelines.gold_pipeline import GoldPipeline, GoldPipelineConfig
 
     logical_date: date = context["logical_date"].date()
     cfg = GoldPipelineConfig(trade_date=str(logical_date))

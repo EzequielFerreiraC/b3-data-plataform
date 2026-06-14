@@ -21,7 +21,7 @@ DEFAULT_ARGS = {
 
 def run_bronze_pipeline(**context) -> None:
     """Task callable — imported inside function to avoid import at DAG parse time."""
-    from pipelines.bronze_pipeline import BronzePipeline, BronzePipelineConfig
+    from f_pipelines.bronze_pipeline import BronzePipeline, BronzePipelineConfig
     from datetime import date
 
     logical_date: date = context["logical_date"].date()
