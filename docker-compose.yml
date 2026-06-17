@@ -71,7 +71,7 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
     command: db migrate
     volumes:
-      - ./dags:/opt/airflow/dags
+      - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
 
   airflow_webserver:
@@ -90,7 +90,7 @@ services:
     ports:
       - "8080:8080"   # Airflow UI → http://localhost:8080
     volumes:
-      - ./dags:/opt/airflow/dags
+      - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
@@ -111,7 +111,7 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
     command: scheduler
     volumes:
-      - ./dags:/opt/airflow/dags
+      - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
       - ./data:/opt/airflow/data        # shared data directory
       - .:/opt/airflow/pipeline_code    # project code available to DAGs
