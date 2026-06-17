@@ -4,9 +4,18 @@ Use create_spark_session() everywhere instead of building SparkSession inline.
 """
 from __future__ import annotations
 
+import os
+from pathlib import Path
+
 from pyspark.sql import SparkSession
 
 from a_configs.settings import SPARK_APP_NAME, SPARK_MASTER
+
+# Ensure HADOOP_HOME is set so Hadoop's Shell class can find winutils.exe
+# (required on Windows / WSL kernels running via the Windows Python interpreter).
+if not os.environ.get("HADOOP_HOME"):
+    _hadoop_home = str(Path(__file__).resolve().parent.parent / "hadoop")
+    os.environ["HADOOP_HOME"] = _hadoop_home
 
 
 def create_spark_session(app_name: str = SPARK_APP_NAME) -> SparkSession:
