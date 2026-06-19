@@ -5,9 +5,16 @@ a Polars DataFrame ready to be written to the Bronze layer.
 """
 from __future__ import annotations
 
+import sys
 from datetime import date, timedelta
 
+# Block curl_cffi BEFORE yfinance is imported — its native C bindings
+# segfault inside Jupyter kernels (especially on WSL).
+# yfinance will fall back to the standard `requests` library.
+sys.modules["curl_cffi"] = None  # type: ignore[assignment]
+
 import polars as pl
+import requests
 import yfinance as yf
 
 from a_configs.logger import get_logger
@@ -15,25 +22,23 @@ from a_configs.settings import DEFAULT_TICKERS
 
 logger = get_logger(__name__)
 
+# Force yfinance to use `requests` instead of `curl_cffi` which segfaults
+# inside Jupyter kernels (especially on WSL).
+_session = requests.Session()
+_session.headers.update({"User-Agent": "Mozilla/5.0"})
+
 
 def _safe_download(ticker: str, start: date, end: date) -> pl.DataFrame | None:
     """Download a single ticker; return None on failure."""
     try:
-        raw = yf.download(
-            ticker,
-            start=str(start),
-            end=str(end),
-            auto_adjust=False,
-            progress=False,
-        )
+        tk = yf.Ticker(ticker, session=_session)
+        raw = tk.history(start=str(start), end=str(end), auto_adjust=False)
+
         if raw.empty:
             logger.warning("No data returned", extra={"ticker": ticker, "start": str(start)})
             return None
 
         raw = raw.reset_index()
-        # Flatten MultiIndex columns if present (yfinance >= 0.2.38)
-        if hasattr(raw.columns, "levels"):
-            raw.columns = [c[0] if isinstance(c, tuple) else c for c in raw.columns]
 
         # yfinance versions differ on the date column name after reset_index()
         if "Date" not in raw.columns and "index" in raw.columns:
@@ -56,7 +61,16 @@ def _safe_download(ticker: str, start: date, end: date) -> pl.DataFrame | None:
             "Volume": "volume",
         }
         df = df.rename({k: v for k, v in rename_map.items() if k in df.columns})
-        df = df.select(["ticker", "trade_date", "open", "high", "low", "close", "adj_close", "volume"])
+
+        # Select only columns that exist (history() may not return Adj Close)
+        cols = ["ticker", "trade_date", "open", "high", "low", "close", "volume"]
+        if "adj_close" in df.columns:
+            cols.insert(6, "adj_close")
+        else:
+            df = df.with_columns(pl.col("close").alias("adj_close"))
+            cols.insert(6, "adj_close")
+
+        df = df.select(cols)
         return df
 
     except Exception as exc:
