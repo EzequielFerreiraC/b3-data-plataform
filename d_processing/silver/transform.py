@@ -83,10 +83,12 @@ def calculate_daily_return(df: pl.DataFrame) -> pl.DataFrame:
     Add ``daily_return`` column: (close_price / prev_close) - 1.
     Window is per ticker, ordered by trade_date.
     """
+    # Must sort before shift: shift().over() operates on physical row order.
+    df = df.sort(["ticker", "trade_date"])
     return df.with_columns(
         (
             pl.col("close_price")
-            / pl.col("close_price").shift(1).over("ticker").sort_by("trade_date")
+            / pl.col("close_price").shift(1).over("ticker")
             - 1
         ).alias("daily_return")
     )
