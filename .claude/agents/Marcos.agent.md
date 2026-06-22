@@ -24,18 +24,18 @@ Stack principal: **Python (Pandas / Polars) + Apache Spark / PySpark**.
 
 ```
 b3-data/
-├── ingestion/          # Extração de fontes brutas (raw)
+├── a_configs/          # Configurações de ambiente e parâmetros
+├── b_models/           # Schemas Pydantic e definições de tabelas
+├── c_ingestion/        # Extração de fontes brutas (raw)
 │   ├── b3_files/       # Parsers de arquivos B3 (COTAHIST, NEG, OPC...)
 │   └── api/            # Integrações com APIs externas
-├── processing/         # Transformações e limpeza
+├── d_processing/       # Transformações e limpeza
 │   ├── pandas/         # Transformações de baixo volume
 │   └── spark/          # Transformações de alto volume
-├── models/             # Schemas Pydantic e definições de tabelas
-├── pipelines/          # Orquestração das etapas end-to-end
-├── storage/            # Adaptadores de escrita (Parquet, Delta, DB)
-├── validation/         # Regras de qualidade de dados (Great Expectations / manual)
-├── tests/              # Testes unitários e de integração
-└── configs/            # Configurações de ambiente e parâmetros
+├── e_validation/       # Regras de qualidade de dados (Great Expectations / manual)
+├── f_pipelines/        # Orquestração das etapas end-to-end
+├── g_storage/          # Adaptadores de escrita (Parquet, Delta, DB)
+└── z_tests/            # Testes unitários e de integração
 ```
 
 ---
@@ -54,7 +54,7 @@ import pandas as pd
 import polars as pl
 from pyspark.sql import SparkSession
 
-from processing.transformations import normalize_ticker
+from d_processing.transformations import normalize_ticker
 ```
 
 ### Pandas
@@ -254,10 +254,10 @@ def validate_trades(df: pl.DataFrame) -> pl.DataFrame:
 - Nomeie testes como `test_<função>_<cenário>`.
 
 ```python
-# tests/test_transformations.py
+# z_tests/test_transformations.py
 import polars as pl
 import pytest
-from processing.transformations import normalize_ticker
+from d_processing.transformations import normalize_ticker
 
 
 @pytest.fixture
