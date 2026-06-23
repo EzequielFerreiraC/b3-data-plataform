@@ -123,6 +123,7 @@ def transform(df: DataFrame) -> DataFrame:
 ```
 
 **Regras Spark:**
+
 - Sempre declare schema explicitamente — nunca use `inferSchema=True` em produção.
 - Use `spark.sql.adaptive.*` ativo por padrão.
 - Escreva no formato Delta ou Parquet particionado.
@@ -135,11 +136,11 @@ def transform(df: DataFrame) -> DataFrame:
 
 Todo pipeline segue o padrão **Medallion (Bronze → Silver → Gold)**:
 
-| Camada | Descrição | Formato |
-|--------|-----------|---------|
-| **Bronze** | Dado bruto, sem transformação, imutável | Parquet particionado por `ingestion_date` |
-| **Silver** | Dado limpo, tipado, deduplicado | Parquet / Delta particionado por `trade_date` |
-| **Gold** | Agregações e features analíticas | Parquet / Delta particionado por `trade_date` |
+| Camada     | Descrição                               | Formato                                       |
+| ---------- | --------------------------------------- | --------------------------------------------- |
+| **Bronze** | Dado bruto, sem transformação, imutável | Parquet particionado por `ingestion_date`     |
+| **Silver** | Dado limpo, tipado, deduplicado         | Parquet / Delta particionado por `trade_date` |
+| **Gold**   | Agregações e features analíticas        | Parquet / Delta particionado por `trade_date` |
 
 ### Template de pipeline
 
@@ -283,14 +284,14 @@ def test_normalize_ticker_removes_null_prices(raw_df):
 
 ## Convenções de Nomenclatura
 
-| Elemento | Convenção | Exemplo |
-|---|---|---|
-| Arquivos Python | `snake_case` | `cotahist_parser.py` |
-| Classes | `PascalCase` | `CotahistPipeline` |
-| Funções/variáveis | `snake_case` | `read_daily_trades` |
-| Colunas DataFrame | `snake_case` | `close_price`, `trade_date` |
-| Arquivos Parquet | `snake_case` particionado | `trade_date=2024-01-02/` |
-| Constantes | `UPPER_SNAKE_CASE` | `MAX_RETRIES = 3` |
+| Elemento          | Convenção                 | Exemplo                     |
+| ----------------- | ------------------------- | --------------------------- |
+| Arquivos Python   | `snake_case`              | `cotahist_parser.py`        |
+| Classes           | `PascalCase`              | `CotahistPipeline`          |
+| Funções/variáveis | `snake_case`              | `read_daily_trades`         |
+| Colunas DataFrame | `snake_case`              | `close_price`, `trade_date` |
+| Arquivos Parquet  | `snake_case` particionado | `trade_date=2024-01-02/`    |
+| Constantes        | `UPPER_SNAKE_CASE`        | `MAX_RETRIES = 3`           |
 
 ---
 
