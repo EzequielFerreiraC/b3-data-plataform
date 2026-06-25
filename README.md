@@ -34,7 +34,8 @@ b3-data/
 ├── dags/               # Airflow DAGs (Bronze → Silver → Gold chain)
 ├── notebooks/          # 01 Bronze · 02 Silver · 03 Gold · 04 Exploration
 ├── tests/              # pytest unit tests + conftest fixtures
-├── data/               # Local Parquet store (bronze / silver / gold)
+├── j_data/             # Local Parquet store (bronze / silver / gold)
+├── k_logs/             # Runtime JSON / log files
 ├── docker-compose.yml  # MinIO + PostgreSQL + Airflow + JupyterLab
 └── requirements.txt
 ```

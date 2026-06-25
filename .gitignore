@@ -18,17 +18,17 @@ env/
 *.ipynb_checkpoints
 
 # Data layers (keep folder structure, ignore data files)
-data/bronze/*
-data/silver/*
-data/gold/*
-!data/bronze/.gitkeep
-!data/silver/.gitkeep
-!data/gold/.gitkeep
+j_data/bronze/*
+j_data/silver/*
+j_data/gold/*
+!j_data/bronze/.gitkeep
+!j_data/silver/.gitkeep
+!j_data/gold/.gitkeep
 
 # Logs
-logs/*.log
-logs/*.json
-!logs/.gitkeep
+k_logs/*.log
+k_logs/*.json
+!k_logs/.gitkeep
 
 # Delta Lake checkpoints
 _delta_log/

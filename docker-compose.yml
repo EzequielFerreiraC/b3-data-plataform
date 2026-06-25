@@ -113,7 +113,7 @@ services:
     volumes:
       - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
-      - ./data:/opt/airflow/data        # shared data directory
+      - ./j_data:/opt/airflow/data        # shared data directory
       - .:/opt/airflow/pipeline_code    # project code available to DAGs
 
   # ---------------------------------------------------------------------------
