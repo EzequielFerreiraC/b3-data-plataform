@@ -16,7 +16,7 @@
 | Data source      | **Yahoo Finance** / BRAPI | B3 daily OHLCV prices                |
 | Containerisation | **Docker Compose**        | Full local environment               |
 
-OHLCV é a sigla em inglês para Open (Abertura), High (Máxima), Low (Mínima), Close (Fechamento) e Volume (Volume
+OHLCV é a sigla em inglês para Open (Abertura), High (Máxima), Low (Mínima), Close (Fechamento) e Volume
 
 ---
 
