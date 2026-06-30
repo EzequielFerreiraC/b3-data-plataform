@@ -47,7 +47,7 @@ def test_write_bronze_partitions_by_trade_date(raw_df, tmp_path, monkeypatch):
     monkeypatch.setattr(_module, "DATA_PATH_BRONZE", tmp_path / "bronze")
 
     write_bronze(raw_df, source="test_src")
-    partitions = list((tmp_path / "bronze" / "test_src").glob("trade_date=*/"))
+    partitions = list((tmp_path / "bronze" / "test_src").glob("trade_date_*/"))
     # raw_df has 2 unique trade_dates
     assert len(partitions) == 2
 

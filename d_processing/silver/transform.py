@@ -20,6 +20,8 @@ from a_configs.settings import DATA_PATH_BRONZE, DATA_PATH_SILVER
 
 logger = get_logger(__name__)
 
+PARTITION_GLOB = "trade_date_*"
+
 
 # ---------------------------------------------------------------------------
 # Individual transformation steps
@@ -151,9 +153,21 @@ def write_silver(df: pl.DataFrame) -> Path:
 
     DATA_PATH_SILVER.mkdir(parents=True, exist_ok=True)
 
+    now = datetime.now(tz=timezone.utc)
+    hhmm = now.strftime("%H%M")
     for trade_date, partition_df in df.group_by("trade_date"):
-        date_str = str(trade_date[0])
-        partition_path = DATA_PATH_SILVER / f"trade_date={date_str}"
+        date_val = trade_date[0]
+        if hasattr(date_val, "strftime"):
+            yy = date_val.strftime("%y")
+            mm = date_val.strftime("%m")
+            dd = date_val.strftime("%d")
+        else:
+            parts = str(date_val).split("-")
+            yy = parts[0][2:4]
+            mm = parts[1]
+            dd = parts[2]
+        partition_name = f"trade_date_{yy}{mm}{dd}_{hhmm}"
+        partition_path = DATA_PATH_SILVER / partition_name
         partition_path.mkdir(parents=True, exist_ok=True)
         partition_df.write_parquet(partition_path / "data.parquet", compression="snappy")
 
@@ -174,9 +188,15 @@ def read_silver(trade_date: str | None = None) -> pl.DataFrame:
         return pl.DataFrame()
 
     if trade_date:
-        paths = [base / f"trade_date={trade_date}" / "data.parquet"]
+        # trade_date comes as YYYY-MM-DD; convert to YYMMDD for glob
+        parts = trade_date.split("-")
+        yy = parts[0][2:4]
+        mm = parts[1]
+        dd = parts[2]
+        prefix = f"trade_date_{yy}{mm}{dd}_"
+        paths = sorted(base.glob(f"{prefix}*/data.parquet"))
     else:
-        paths = sorted(base.glob("trade_date=*/data.parquet"))
+        paths = sorted(base.glob("trade_date_*/data.parquet"))
 
     frames = [pl.read_parquet(p) for p in paths if Path(p).exists()]
     if not frames:

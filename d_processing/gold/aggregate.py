@@ -134,7 +134,7 @@ def write_gold(df: pl.DataFrame, table: str) -> Path:
 
     if "year" in df.columns and "month" in df.columns:
         for (year, month), part_df in df.group_by(["year", "month"]):
-            part_dir = output_path / f"year={year}/month={month:02d}"
+            part_dir = output_path / f"year_{year}" / f"month_{month:02d}"
             part_dir.mkdir(parents=True, exist_ok=True)
             part_df.write_parquet(part_dir / "data.parquet", compression="snappy")
     else:
