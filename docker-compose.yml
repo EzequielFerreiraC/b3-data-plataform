@@ -59,7 +59,9 @@ services:
   # Apache Airflow — scheduler + webserver
   # ---------------------------------------------------------------------------
   airflow_init:
-    image: apache/airflow:2.9.1-python3.11
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: b3_airflow_init
     depends_on:
       postgres:
@@ -69,13 +71,19 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       AIRFLOW__CORE__FERNET_KEY: ""
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      _AIRFLOW_DB_MIGRATE: "true"
+      _AIRFLOW_WWW_USER_CREATE: "true"
+      _AIRFLOW_WWW_USER_USERNAME: admin
+      _AIRFLOW_WWW_USER_PASSWORD: admin
     command: db migrate
     volumes:
       - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
 
   airflow_webserver:
-    image: apache/airflow:2.9.1-python3.11
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: b3_airflow_webserver
     depends_on:
       airflow_init:
@@ -86,12 +94,15 @@ services:
       AIRFLOW__CORE__FERNET_KEY: ""
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__WEBSERVER__SECRET_KEY: "b3-data-platform-secret"
+      PYTHONPATH: /opt/airflow/b3_platform
     command: webserver
     ports:
       - "8080:8080"   # Airflow UI → http://localhost:8080
     volumes:
       - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
+      - ./j_data:/opt/airflow/data
+      - ./y_outputs:/opt/airflow/outputs
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
@@ -99,7 +110,9 @@ services:
       retries: 5
 
   airflow_scheduler:
-    image: apache/airflow:2.9.1-python3.11
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: b3_airflow_scheduler
     depends_on:
       airflow_init:
@@ -109,12 +122,13 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       AIRFLOW__CORE__FERNET_KEY: ""
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      PYTHONPATH: /opt/airflow/b3_platform
     command: scheduler
     volumes:
       - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
-      - ./j_data:/opt/airflow/data        # shared data directory
-      - .:/opt/airflow/pipeline_code    # project code available to DAGs
+      - ./j_data:/opt/airflow/data
+      - ./y_outputs:/opt/airflow/outputs
 
   # ---------------------------------------------------------------------------
   # JupyterLab — interactive analysis

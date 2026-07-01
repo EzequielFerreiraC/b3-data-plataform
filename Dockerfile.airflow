@@ -3,6 +3,8 @@ FROM apache/airflow:2.9.1-python3.11
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openjdk-17-jdk-headless \
+    libfontconfig1 \
+    fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
@@ -14,3 +16,5 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 COPY --chown=airflow:root . /opt/airflow/b3_platform
 ENV PYTHONPATH="/opt/airflow/b3_platform:${PYTHONPATH}"
+
+RUN mkdir -p /opt/airflow/outputs
