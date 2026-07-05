@@ -102,16 +102,19 @@ setup_python_env() {
         success "Virtual environment already exists"
     fi
 
-    # Activate
-    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+    # Activate — detect actual venv layout
+    if [ -f ".venv/Scripts/activate" ]; then
         source .venv/Scripts/activate
-    else
+    elif [ -f ".venv/bin/activate" ]; then
         source .venv/bin/activate
+    else
+        error "Cannot find venv activate script"
+        return 1
     fi
 
     info "Installing Python dependencies..."
-    pip install --upgrade pip -q
-    pip install -r requirements.txt -q
+    $PYTHON_CMD -m pip install --upgrade pip -q 2>/dev/null || true
+    $PYTHON_CMD -m pip install -r requirements.txt -q
     success "Python dependencies installed"
 }
 
@@ -174,7 +177,7 @@ setup_directories() {
     info "Creating project directories..."
     mkdir -p j_data/bronze j_data/silver j_data/gold
     mkdir -p k_logs
-    mkdir -p y_outputs
+    mkdir -p z_outputs
     success "Directories ready"
 }
 
@@ -207,9 +210,9 @@ run_pipeline() {
     local layer="${1:-all}"
     info "Running pipeline: $layer"
 
-    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+    if [ -f ".venv/Scripts/activate" ]; then
         source .venv/Scripts/activate 2>/dev/null || true
-    else
+    elif [ -f ".venv/bin/activate" ]; then
         source .venv/bin/activate 2>/dev/null || true
     fi
 

@@ -102,7 +102,7 @@ services:
       - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
       - ./j_data:/opt/airflow/data
-      - ./y_outputs:/opt/airflow/outputs
+      - ./z_outputs:/opt/airflow/outputs
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
@@ -128,7 +128,7 @@ services:
       - ./h_dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
       - ./j_data:/opt/airflow/data
-      - ./y_outputs:/opt/airflow/outputs
+      - ./z_outputs:/opt/airflow/outputs
 
   # ---------------------------------------------------------------------------
   # JupyterLab — interactive analysis

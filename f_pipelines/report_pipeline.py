@@ -25,7 +25,7 @@ class ReportPipelineConfig:
 
 class ReportPipeline:
     """
-    Read Gold tables → generate PDF report → save to y_outputs/.
+    Read Gold tables -> generate PDF report -> save to z_outputs/.
 
     Output: relatorio_YYMMDD_HHMM.pdf
     """
