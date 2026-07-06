@@ -1,0 +1,16 @@
+.venv
+.git
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+j_data
+k_logs
+z_outputs
+i_notebooks
+hadoop
+.env
+*.egg-info
+.DS_Store
+.vscode
+.idea
