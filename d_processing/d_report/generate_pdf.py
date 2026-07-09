@@ -3,7 +3,7 @@ PDF Report Generator - B3 Data Platform.
 
 Generates analytical PDF reports from Gold layer data using FPDF2 + Matplotlib.
 Charts replicate the same visualizations from the project notebooks.
-Output format: relatorio_YYMMDD_HHMM.pdf
+Output format: report_YYMMDD_HHMM.pdf
 """
 from __future__ import annotations
 
@@ -504,13 +504,13 @@ def generate_report(
     Generate a full PDF report from Gold layer data.
     Charts replicate the notebooks visualizations.
 
-    Output: relatorio_YYMMDD_HHMM.pdf
+    Output: report_YYMMDD_HHMM.pdf
     """
     report_date = report_date or datetime.now(timezone.utc)
     output_dir = output_dir or OUTPUTS_PATH
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    filename = f"relatorio_{report_date.strftime('%y%m%d_%H%M')}.pdf"
+    filename = f"report_{report_date.strftime('%y%m%d_%H%M')}.pdf"
     output_path = output_dir / filename
 
     logger.info("Generating PDF report", extra={"output": str(output_path)})
