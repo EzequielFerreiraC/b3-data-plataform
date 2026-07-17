@@ -16,11 +16,11 @@ load_dotenv()
 # ---------------------------------------------------------------------------
 ROOT_DIR: Path = Path(__file__).resolve().parent.parent
 
-DATA_PATH_BRONZE: Path = ROOT_DIR / os.getenv("DATA_PATH_BRONZE", "j_data/bronze")
-DATA_PATH_SILVER: Path = ROOT_DIR / os.getenv("DATA_PATH_SILVER", "j_data/silver")
-DATA_PATH_GOLD: Path = ROOT_DIR / os.getenv("DATA_PATH_GOLD", "j_data/gold")
+DATA_PATH_BRONZE: Path = ROOT_DIR / os.getenv("DATA_PATH_BRONZE", "j_data/a_bronze")
+DATA_PATH_SILVER: Path = ROOT_DIR / os.getenv("DATA_PATH_SILVER", "j_data/b_silver")
+DATA_PATH_GOLD: Path = ROOT_DIR / os.getenv("DATA_PATH_GOLD", "j_data/c_gold")
 LOGS_PATH: Path = ROOT_DIR / os.getenv("LOGS_PATH", "k_logs")
-OUTPUTS_PATH: Path = ROOT_DIR / os.getenv("OUTPUTS_PATH", "z_outputs")
+OUTPUTS_PATH: Path = ROOT_DIR / os.getenv("OUTPUTS_PATH", "n_reports")
 
 # ---------------------------------------------------------------------------
 # MinIO / S3
