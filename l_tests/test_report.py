@@ -77,7 +77,7 @@ class TestReportGeneration:
         self, gold_daily_metrics, gold_portfolio_summary, gold_monthly_returns, tmp_path
     ):
         """Report generation should produce a valid PDF file."""
-        from d_processing.report.generate_pdf import generate_report
+        from d_processing.d_report.generate_pdf import generate_report
 
         report_date = datetime(2024, 1, 22, 18, 30, tzinfo=timezone.utc)
         result = generate_report(
@@ -89,14 +89,14 @@ class TestReportGeneration:
         )
 
         assert result.exists()
-        assert result.name == "relatorio_240122_1830.pdf"
+        assert result.name == "report_240122_1830.pdf"
         assert result.stat().st_size > 1000  # PDF should have real content
 
     def test_generate_report_naming_pattern(
         self, gold_daily_metrics, gold_portfolio_summary, gold_monthly_returns, tmp_path
     ):
         """Verify the YYMMDD_HHMM naming pattern."""
-        from d_processing.report.generate_pdf import generate_report
+        from d_processing.d_report.generate_pdf import generate_report
 
         report_date = datetime(2026, 7, 5, 14, 0, tzinfo=timezone.utc)
         result = generate_report(
@@ -107,11 +107,11 @@ class TestReportGeneration:
             report_date=report_date,
         )
 
-        assert result.name == "relatorio_260705_1400.pdf"
+        assert result.name == "report_260705_1400.pdf"
 
     def test_generate_report_empty_data(self, tmp_path):
         """Report should still generate with empty DataFrames (no charts)."""
-        from d_processing.report.generate_pdf import generate_report
+        from d_processing.d_report.generate_pdf import generate_report
 
         report_date = datetime(2024, 1, 22, 18, 30, tzinfo=timezone.utc)
         result = generate_report(
@@ -127,8 +127,8 @@ class TestReportGeneration:
 
     def test_report_pipeline_no_data(self, tmp_path, monkeypatch):
         """Pipeline should return None when Gold tables are empty."""
-        from d_processing.gold import aggregate
-        from f_pipelines.report_pipeline import ReportPipeline, ReportPipelineConfig
+        from d_processing.c_gold import aggregate
+        from lab_vacation260625.b3_data_plataform_ezequiel_fc.f_pipelines.d_report_pipeline import ReportPipeline, ReportPipelineConfig
 
         monkeypatch.setattr(aggregate, "read_gold", lambda table: pl.DataFrame())
 

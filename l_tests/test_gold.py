@@ -6,7 +6,7 @@ from __future__ import annotations
 import polars as pl
 import pytest
 
-from d_processing.gold.aggregate import (
+from d_processing.c_gold.aggregate import (
     build_daily_metrics,
     build_monthly_returns,
     build_portfolio_summary,

@@ -57,7 +57,7 @@ def raw_df_with_duplicates(raw_df: pl.DataFrame) -> pl.DataFrame:
 @pytest.fixture
 def silver_df(raw_df: pl.DataFrame) -> pl.DataFrame:
     """Full Silver-transformed DataFrame derived from raw_df."""
-    from d_processing.silver.transform import transform_silver
+    from d_processing.b_silver.transform import transform_silver
     return transform_silver(raw_df)
 
 
