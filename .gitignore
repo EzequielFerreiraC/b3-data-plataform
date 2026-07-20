@@ -21,12 +21,12 @@ env/
 *.ipynb_checkpoints
 
 # Data layers (keep folder structure, ignore data files)
-j_data/bronze/*
-j_data/silver/*
-j_data/gold/*
-!j_data/bronze/.gitkeep
-!j_data/silver/.gitkeep
-!j_data/gold/.gitkeep
+j_data/a_bronze/*
+j_data/b_silver/*
+j_data/c_gold/*
+!j_data/a_bronze/.gitkeep
+!j_data/b_silver/.gitkeep
+!j_data/c_gold/.gitkeep
 
 # Logs
 k_logs/*.log

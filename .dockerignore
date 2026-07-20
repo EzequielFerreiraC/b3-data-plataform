@@ -7,6 +7,7 @@ __pycache__
 j_data
 k_logs
 z_outputs
+n_reports
 i_notebooks
 hadoop
 .env

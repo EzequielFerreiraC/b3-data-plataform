@@ -31,17 +31,24 @@ b3-data/
 ├── b_models/           # Pydantic models + Spark schemas
 ├── c_ingestion/        # Yahoo Finance + BRAPI adapters
 ├── d_processing/
-│   ├── bronze/         # Raw writer / reader
-│   ├── silver/         # ETL transformations
-│   └── gold/           # Aggregations (daily metrics, portfolio, monthly)
+│   ├── a_bronze/       # Raw writer / reader
+│   ├── b_silver/       # ETL transformations
+│   ├── c_gold/         # Aggregations (daily metrics, portfolio, monthly)
+│   └── d_report/       # PDF report generation
 ├── e_validation/       # Quality checks (fail-fast assertions)
 ├── f_pipelines/        # Bronze / Silver / Gold pipeline classes
 ├── g_storage/          # Storage adapters (Parquet / Delta / DB)
 ├── h_dags/             # Airflow DAGs (Bronze → Silver → Gold chain)
 ├── i_notebooks/        # 01 Bronze · 02 Silver · 03 Gold · 04 Exploration
-├── z_tests/            # pytest unit tests + conftest fixtures
-├── data/               # Local Parquet store (bronze / silver / gold)
-├── docker-compose.yml  # MinIO + PostgreSQL + Airflow + JupyterLab
+├── j_data/             # Local Parquet store (bronze / silver / gold)
+├── k_logs/             # Application logs
+├── l_tests/            # pytest unit tests + conftest fixtures
+├── z_infra/            # Docker infrastructure
+│   ├── docker-compose.yml    # MinIO + PostgreSQL + Airflow + JupyterLab
+│   ├── Dockerfile.airflow    # Custom Airflow image
+│   └── .dockerignore         # Docker build exclusions
+├── setup.sh            # Setup & management script (Linux/macOS/WSL)
+├── setup.bat           # Windows launcher
 └── requirements.txt
 ```
 
@@ -61,9 +68,9 @@ cp .env.example .env
 
 # Run full pipeline (Bronze → Silver → Gold)
 python - <<'EOF'
-from f_pipelines.bronze_pipeline import BronzePipeline
-from f_pipelines.silver_pipeline import SilverPipeline
-from f_pipelines.gold_pipeline import GoldPipeline
+from f_pipelines.a_bronze_pipeline import BronzePipeline
+from f_pipelines.b_silver_pipeline import SilverPipeline
+from f_pipelines.c_gold_pipeline import GoldPipeline
 
 BronzePipeline().run()
 SilverPipeline().run()
@@ -77,12 +84,21 @@ jupyter lab i_notebooks/
 ### 2 — Docker Compose (full stack)
 
 ```bash
+# Using the automated setup script (recommended)
+./setup.sh setup     # Full setup
+./setup.sh up        # Start containers only
+./setup.sh down      # Stop containers
+./setup.sh status    # Check status
+./setup.sh logs      # View logs
+
+# Or manually
+cd z_infra
 docker compose up -d
 
 # Services:
 #   JupyterLab  →  http://localhost:8888  (token: b3data)
-#   Airflow UI  →  http://localhost:8080
-#   MinIO UI    →  http://localhost:9001  (user/pass: minioadmin)
+#   Airflow UI  →  http://localhost:8080  (user/pass: admin/admin)
+#   MinIO UI    →  http://localhost:9001  (user/pass: minioadmin/minioadmin)
 ```
 
 ### 3 — Run tests
@@ -106,11 +122,11 @@ pytest -v
 
 ## Airflow DAGs
 
-| DAG                   | Schedule          | Description           |
-| --------------------- | ----------------- | --------------------- |
-| `b3_bronze_ingestion` | Mon–Fri 22:00 UTC | Fetch prices → Bronze |
-| `b3_silver_etl`       | Mon–Fri 22:30 UTC | Bronze → Silver ETL   |
-| `b3_gold_aggregation` | Mon–Fri 23:00 UTC | Silver → Gold tables  |
+| DAG                     | Schedule          | Description           |
+| ----------------------- | ----------------- | --------------------- |
+| `a_b3_bronze_ingestion` | Mon–Fri 22:00 UTC | Fetch prices → Bronze |
+| `b_b3_silver_etl`       | Mon–Fri 22:30 UTC | Bronze → Silver ETL   |
+| `c_b3_gold_aggregation` | Mon–Fri 23:00 UTC | Silver → Gold tables  |
 
 DAGs use `ExternalTaskSensor` so Silver waits for Bronze and Gold waits for Silver.
 

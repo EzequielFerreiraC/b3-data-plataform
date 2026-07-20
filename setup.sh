@@ -47,6 +47,8 @@ check_docker_compose() {
         error "Docker Compose not found. Install: https://docs.docker.com/compose/install/"
         return 1
     fi
+    # Use docker-compose.yml from z_infra/
+    COMPOSE_FILE="z_infra/docker-compose.yml"
     success "Docker Compose is available ($COMPOSE_CMD)"
 }
 
@@ -123,7 +125,7 @@ setup_python_env() {
 # ---------------------------------------------------------------------------
 containers_up() {
     info "Building and starting all containers..."
-    $COMPOSE_CMD up -d --build
+    $COMPOSE_CMD -f "$COMPOSE_FILE" up -d --build
     echo ""
     success "All containers are running!"
     echo ""
@@ -136,13 +138,13 @@ containers_up() {
 
 containers_down() {
     info "Stopping all containers..."
-    $COMPOSE_CMD down
+    $COMPOSE_CMD -f "$COMPOSE_FILE" down
     success "All containers stopped"
 }
 
 containers_restart() {
     info "Restarting all containers..."
-    $COMPOSE_CMD restart
+    $COMPOSE_CMD -f "$COMPOSE_FILE" restart
     success "All containers restarted"
 }
 
@@ -150,7 +152,7 @@ containers_destroy() {
     warn "This will stop containers AND delete volumes (all data will be lost)!"
     read -rp "Are you sure? [y/N]: " confirm
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
-        $COMPOSE_CMD down -v
+        $COMPOSE_CMD -f "$COMPOSE_FILE" down -v
         success "Containers and volumes destroyed"
     else
         info "Cancelled"
@@ -160,14 +162,14 @@ containers_destroy() {
 containers_logs() {
     local service="${1:-}"
     if [ -n "$service" ]; then
-        $COMPOSE_CMD logs -f "$service"
+        $COMPOSE_CMD -f "$COMPOSE_FILE" logs -f "$service"
     else
-        $COMPOSE_CMD logs -f --tail=50
+        $COMPOSE_CMD -f "$COMPOSE_FILE" logs -f --tail=50
     fi
 }
 
 containers_status() {
-    $COMPOSE_CMD ps
+    $COMPOSE_CMD -f "$COMPOSE_FILE" ps
 }
 
 # ---------------------------------------------------------------------------
@@ -175,9 +177,9 @@ containers_status() {
 # ---------------------------------------------------------------------------
 setup_directories() {
     info "Creating project directories..."
-    mkdir -p j_data/bronze j_data/silver j_data/gold
+    mkdir -p j_data/a_bronze j_data/b_silver j_data/c_gold
     mkdir -p k_logs
-    mkdir -p z_outputs
+    mkdir -p n_reports
     success "Directories ready"
 }
 
@@ -218,22 +220,22 @@ run_pipeline() {
 
     case "$layer" in
         bronze)
-            $PYTHON_CMD -m f_pipelines.bronze_pipeline
+            $PYTHON_CMD -m f_pipelines.a_bronze_pipeline
             ;;
         silver)
-            $PYTHON_CMD -m f_pipelines.silver_pipeline
+            $PYTHON_CMD -m f_pipelines.b_silver_pipeline
             ;;
         gold)
-            $PYTHON_CMD -m f_pipelines.gold_pipeline
+            $PYTHON_CMD -m f_pipelines.c_gold_pipeline
             ;;
         report)
-            $PYTHON_CMD -m f_pipelines.report_pipeline
+            $PYTHON_CMD -m f_pipelines.d_report_pipeline
             ;;
         all)
-            $PYTHON_CMD -m f_pipelines.bronze_pipeline
-            $PYTHON_CMD -m f_pipelines.silver_pipeline
-            $PYTHON_CMD -m f_pipelines.gold_pipeline
-            $PYTHON_CMD -m f_pipelines.report_pipeline
+            $PYTHON_CMD -m f_pipelines.a_bronze_pipeline
+            $PYTHON_CMD -m f_pipelines.b_silver_pipeline
+            $PYTHON_CMD -m f_pipelines.c_gold_pipeline
+            $PYTHON_CMD -m f_pipelines.d_report_pipeline
             ;;
         *)
             error "Unknown pipeline: $layer (use: bronze|silver|gold|report|all)"
