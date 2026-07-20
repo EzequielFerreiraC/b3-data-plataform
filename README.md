@@ -8,7 +8,7 @@
 
 ---
 
-## 📊 Architecture Overview
+## Architecture Overview
 
 This platform implements a **Medallion Architecture** (Bronze-Silver-Gold) for processing Brazilian stock market data:
 
@@ -17,37 +17,37 @@ flowchart LR
     %% Data Sources
     YF[Yahoo Finance API]
     BRAPI[BRAPI]
-    
+
     %% Ingestion
     YF --> ING[Ingestion Layer]
     BRAPI --> ING
-    
+
     %% Bronze Layer
     ING --> BRONZE[(Bronze Layer<br/>Raw Data<br/>Parquet)]
-    
+
     %% Silver Layer
     BRONZE --> ETL[ETL Processing<br/>- Deduplication<br/>- Validation<br/>- Enrichment]
     ETL --> SILVER[(Silver Layer<br/>Clean Data<br/>Parquet)]
-    
+
     %% Gold Layer
     SILVER --> AGG[Aggregation<br/>- Daily Metrics<br/>- Portfolio Summary<br/>- Monthly Returns]
     AGG --> GOLD[(Gold Layer<br/>Analytics<br/>Parquet)]
-    
+
     %% Consumption
     GOLD --> NB[Jupyter Notebooks<br/>Interactive Analysis]
     GOLD --> RPT[PDF Reports<br/>Automated Insights]
     GOLD --> VIZ[Visualizations<br/>Charts & Dashboards]
-    
+
     %% Orchestration
     AIRFLOW[Apache Airflow<br/>Orchestration] -.-> ING
     AIRFLOW -.-> ETL
     AIRFLOW -.-> AGG
-    
+
     %% Storage
     MINIO[MinIO<br/>S3-Compatible Storage] -.-> BRONZE
     MINIO -.-> SILVER
     MINIO -.-> GOLD
-    
+
     style BRONZE fill:#cd7f32,stroke:#333,stroke-width:2px,color:#fff
     style SILVER fill:#c0c0c0,stroke:#333,stroke-width:2px,color:#000
     style GOLD fill:#ffd700,stroke:#333,stroke-width:2px,color:#000
@@ -55,13 +55,13 @@ flowchart LR
     style MINIO fill:#c72e49,stroke:#333,stroke-width:2px,color:#fff
 ```
 
-### 🏗️ Medallion Layers Explained
+### Medallion Layers Explained
 
-| Layer      | Description | Data Quality | Use Case |
-|------------|-------------|--------------|----------|
-| **🥉 Bronze** | Raw data as-is from sources | Low - No transformations | Audit trail, reprocessing |
-| **🥈 Silver** | Cleaned, deduplicated, validated | Medium - Business rules applied | Analytics queries, ML features |
-| **🥇 Gold** | Aggregated, business-ready metrics | High - Production-ready | Reports, dashboards, KPIs |
+| Layer      | Description                        | Data Quality                    | Use Case                       |
+| ---------- | ---------------------------------- | ------------------------------- | ------------------------------ |
+| **Bronze** | Raw data as-is from sources        | Low - No transformations        | Audit trail, reprocessing      |
+| **Silver** | Cleaned, deduplicated, validated   | Medium - Business rules applied | Analytics queries, ML features |
+| **Gold**   | Aggregated, business-ready metrics | High - Production-ready         | Reports, dashboards, KPIs      |
 
 ---
 
@@ -102,9 +102,9 @@ b3-data-plataform/
 ├── h_dags/             # Airflow DAGs (Bronze → Silver → Gold chain)
 ├── i_notebooks/        # 01 Bronze · 02 Silver · 03 Gold · 04 Exploration
 ├── j_data/             # Local Parquet store (Medallion layers)
-│   ├── a_bronze/       # 🥉 Raw ingested data (partitioned by trade_date)
-│   ├── b_silver/       # 🥈 Cleaned & validated data
-│   └── c_gold/         # 🥇 Aggregated analytics-ready tables
+│   ├── a_bronze/       # Raw ingested data (partitioned by trade_date)
+│   ├── b_silver/       # Cleaned & validated data
+│   └── c_gold/         # Aggregated analytics-ready tables
 ├── k_logs/             # Application logs (JSON structured)
 ├── l_tests/            # pytest unit tests + conftest fixtures
 ├── m_docs/             # Project documentation (PRDs, architecture)
@@ -113,7 +113,7 @@ b3-data-plataform/
 │   ├── docker-compose.yml    # MinIO + PostgreSQL + Airflow + JupyterLab
 │   ├── Dockerfile.airflow    # Custom Airflow image
 │   └── .dockerignore         # Docker build exclusions
-├── run_pipeline.py     # 🚀 One-command full pipeline execution
+├── run_pipeline.py     # One-command full pipeline execution
 ├── setup.sh            # Setup & management script (Linux/macOS/WSL)
 ├── setup.bat           # Windows launcher
 └── requirements.txt    # Python dependencies
@@ -121,7 +121,7 @@ b3-data-plataform/
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1 — Local (no Docker)
 
@@ -133,10 +133,10 @@ pip install -r requirements.txt
 # Copy env file
 cp .env.example .env
 
-# ⚡ Option 1: Run complete pipeline with one command (recommended)
+# Option 1: Run complete pipeline with one command (recommended)
 python run_pipeline.py
 
-# ✅ Option 2: Run each layer manually
+# Option 2: Run each layer manually
 python -c "
 from f_pipelines.a_bronze_pipeline import BronzePipeline
 from f_pipelines.b_silver_pipeline import SilverPipeline
@@ -154,22 +154,23 @@ jupyter lab i_notebooks/
 ```
 
 **Pipeline Execution Output:**
+
 ```
 ================================================================================
 B3 DATA PLATFORM - FULL PIPELINE EXECUTION
 ================================================================================
 
 [1/4] Running Bronze Pipeline (Data Ingestion)...
-✓ Bronze complete: 2988 rows ingested
+Bronze complete: 2988 rows ingested
 
 [2/4] Running Silver Pipeline (Data Transformation)...
-✓ Silver complete
+Silver complete
 
 [3/4] Running Gold Pipeline (Analytics & Aggregation)...
-✓ Gold complete
+Gold complete
 
 [4/4] Running Report Pipeline (PDF Generation)...
-✓ Report complete: /path/to/report_260720_1509.pdf
+Report complete: /path/to/report_260720_1509.pdf
 
 ================================================================================
 PIPELINE EXECUTION COMPLETE!
@@ -227,7 +228,7 @@ DAGs use `ExternalTaskSensor` so Silver waits for Bronze and Gold waits for Silv
 
 ---
 
-## 📈 Tracked Tickers (default)
+## Tracked Tickers (default)
 
 `PETR4` · `VALE3` · `ITUB4` · `BBDC4` · `ABEV3` · `WEGE3` · `RENT3` · `MGLU3` · `BPAC11` · `LREN3` · `BBAS3` · `RADL3`
 
@@ -235,9 +236,10 @@ Override via `DEFAULT_TICKERS` in `a_configs/settings.py` or pass a custom list 
 
 ---
 
-## 🆕 Recent Updates
+## Recent Updates
 
 ### Data Layer Reorganization (2026-07-20)
+
 - **Renamed folders** for better clarity: `bronze` → `a_bronze`, `silver` → `b_silver`, `gold` → `c_gold`
 - **Fixed pivot aggregation** bug that caused duplicate value errors in PDF reports
 - **Added `run_pipeline.py`** - One-command script to execute the complete pipeline (Bronze → Silver → Gold → Report)
@@ -245,36 +247,7 @@ Override via `DEFAULT_TICKERS` in `a_configs/settings.py` or pass a custom list 
 
 ---
 
-## 📝 Data Flow
-
-```mermaid
-sequenceDiagram
-    participant YF as Yahoo Finance
-    participant Bronze as Bronze Layer
-    participant Silver as Silver Layer
-    participant Gold as Gold Layer
-    participant Report as PDF Report
-    
-    Note over YF,Report: Daily Pipeline Execution
-    
-    YF->>Bronze: Fetch OHLCV prices (12 tickers)
-    Note over Bronze: Store raw Parquet<br/>Partitioned by trade_date
-    
-    Bronze->>Silver: Read raw data
-    Note over Silver: Deduplicate<br/>Validate schema<br/>Add calculated fields
-    Silver->>Silver: Quality checks
-    
-    Silver->>Gold: Read clean data
-    Note over Gold: Aggregate metrics<br/>- Daily metrics<br/>- Portfolio summary<br/>- Monthly returns
-    
-    Gold->>Report: Read aggregated data
-    Note over Report: Generate charts<br/>Export PDF
-    Report-->>Gold: report_YYMMDD_HHMM.pdf
-```
-
----
-
-## 🛠️ Configuration
+## Configuration
 
 All configuration is centralized in `.env` file:
 
