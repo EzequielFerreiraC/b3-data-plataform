@@ -24,9 +24,15 @@ env/
 j_data/a_bronze/*
 j_data/b_silver/*
 j_data/c_gold/*
+j_data/bronze/*
+j_data/silver/*
+j_data/gold/*
 !j_data/a_bronze/.gitkeep
 !j_data/b_silver/.gitkeep
 !j_data/c_gold/.gitkeep
+!j_data/bronze/.gitkeep
+!j_data/silver/.gitkeep
+!j_data/gold/.gitkeep
 
 # Logs
 k_logs/*.log
@@ -35,6 +41,7 @@ k_logs/*.json
 
 # Outputs (generated PDFs)
 z_outputs/*.pdf
+z_outputs/*.png
 !z_outputs/.gitkeep
 
 # Delta Lake checkpoints
