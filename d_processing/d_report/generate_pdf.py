@@ -160,6 +160,9 @@ def chart_monthly_heatmap(monthly: pl.DataFrame) -> str:
         .with_columns(
             (pl.col("year").cast(pl.Utf8) + "-" + pl.col("month").cast(pl.Utf8).str.zfill(2)).alias("ym")
         )
+        # Ensure unique values per ticker/month (in case of duplicates)
+        .group_by(["ticker", "ym"])
+        .agg(pl.col("month_return").mean())
         .pivot(values="month_return", index="ticker", on="ym")
         .sort("ticker")
     )
@@ -200,6 +203,9 @@ def chart_correlation_matrix(daily: pl.DataFrame) -> str:
     wide = (
         daily
         .select(["ticker", "trade_date", "daily_return"])
+        # Ensure unique values per ticker/date (in case of duplicates from multiple partitions)
+        .group_by(["ticker", "trade_date"])
+        .agg(pl.col("daily_return").mean())
         .pivot(values="daily_return", index="trade_date", on="ticker")
         .sort("trade_date")
     )

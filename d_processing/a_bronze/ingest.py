@@ -23,7 +23,7 @@ def write_bronze(df: pl.DataFrame, source: str = "yahoo_finance") -> Path:
     Persist raw ingestion data to the Bronze layer.
 
     - Adds ``source`` and ``ingested_at`` metadata columns.
-    - Writes partitioned Parquet: ``data/bronze/<source>/trade_date_YYMMDD_HHMM/``.
+    - Writes partitioned Parquet: ``j_data/a_bronze/<source>/trade_date_YYMMDD_HHMM/``.
     - Idempotent: re-running with the same data overwrites the same partition.
 
     Parameters
@@ -93,7 +93,7 @@ def read_bronze(source: str = "yahoo_finance", trade_date: str | None = None) ->
     Parameters
     ----------
     source:
-        Source identifier (subfolder under data/bronze/).
+        Source identifier (subfolder under j_data/a_bronze/).
     trade_date:
         Optional ISO date string (YYYY-MM-DD) to read a single partition.
         If None, reads all available partitions.
