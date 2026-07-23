@@ -11,8 +11,8 @@ ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
 USER airflow
 
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+COPY requirements-airflow.txt /tmp/requirements-airflow.txt
+RUN pip install --no-cache-dir -r /tmp/requirements-airflow.txt
 
 COPY --chown=airflow:root . /opt/airflow/b3_platform
 ENV PYTHONPATH="/opt/airflow/b3_platform:${PYTHONPATH}"
