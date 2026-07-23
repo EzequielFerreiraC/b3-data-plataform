@@ -67,7 +67,6 @@ class ReportPipeline:
         logger.info("ReportPipeline finished", extra={"output": str(output_path)})
         return output_path
 
-
 # ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------

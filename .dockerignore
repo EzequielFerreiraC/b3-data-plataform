@@ -6,7 +6,7 @@ __pycache__
 *.pyo
 j_data
 k_logs
-z_outputs
+n_reports
 n_reports
 i_notebooks
 hadoop

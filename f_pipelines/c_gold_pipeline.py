@@ -68,3 +68,12 @@ class GoldPipeline:
             logger.info("Gold table ready", extra={"table": name, "rows": len(df)})
         logger.info("GoldPipeline finished")
         return tables
+
+
+if __name__ == "__main__":
+    result = GoldPipeline().run()
+    if result:
+        for name, df in result.items():
+            print(f"Gold table '{name}': {len(df)} rows")
+    else:
+        print("No data to aggregate.")

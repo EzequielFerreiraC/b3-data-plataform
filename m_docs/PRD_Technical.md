@@ -46,7 +46,7 @@ Fontes externas (Yahoo Finance, BRAPI)
         |
         v
 +------------------+   Relatorio PDF (FPDF2 + Matplotlib/Seaborn)
-|  d_report        |   z_outputs/relatorio_YYMMDD_HHMM.pdf
+|  d_report        |   n_reports/report_YYMMDD_HHMM.pdf
 +------------------+
 ```
 
@@ -75,7 +75,7 @@ Fontes externas (Yahoo Finance, BRAPI)
 | `j_data/`       | Dados locais por camada                              |
 | `k_logs/`       | Logs                                                 |
 | `l_tests/`      | Testes                                               |
-| `z_outputs/`    | Relatorios gerados                                   |
+| `n_reports/`    | Relatorios gerados (PDF)                             |
 
 ---
 
@@ -164,7 +164,7 @@ class CleanTrade(BaseModel):      # Silver (tipos resolvidos, sem nulos em chave
 - Ferramentas: FPDF2 + Matplotlib/Seaborn.
 - Graficos: retorno acumulado (top 5), volatilidade 20d (top 5), risco versus
   retorno (scatter), heatmap de retornos mensais.
-- Saida: `z_outputs/relatorio_YYMMDD_HHMM.pdf` (DPI 150).
+- Saida: `n_reports/report_YYMMDD_HHMM.pdf` (DPI 150).
 
 ---
 

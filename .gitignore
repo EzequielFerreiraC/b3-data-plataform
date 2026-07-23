@@ -40,9 +40,9 @@ k_logs/*.json
 !k_logs/.gitkeep
 
 # Outputs (generated PDFs)
-z_outputs/*.pdf
-z_outputs/*.png
-!z_outputs/.gitkeep
+n_reports/*.pdf
+n_reports/*.png
+!n_reports/.gitkeep
 
 # Delta Lake checkpoints
 _delta_log/

@@ -59,3 +59,11 @@ class SilverPipeline:
         self.load(clean)
         logger.info("SilverPipeline finished", extra={"rows": len(clean)})
         return clean
+
+
+if __name__ == "__main__":
+    result = SilverPipeline().run()
+    if not result.is_empty():
+        print(f"Silver ETL complete: {len(result)} rows")
+    else:
+        print("No data to transform.")

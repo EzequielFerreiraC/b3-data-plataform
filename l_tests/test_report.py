@@ -127,10 +127,10 @@ class TestReportGeneration:
 
     def test_report_pipeline_no_data(self, tmp_path, monkeypatch):
         """Pipeline should return None when Gold tables are empty."""
-        from d_processing.c_gold import aggregate
-        from lab_vacation260625.b3_data_plataform_ezequiel_fc.f_pipelines.d_report_pipeline import ReportPipeline, ReportPipelineConfig
+        from f_pipelines import d_report_pipeline
+        from f_pipelines.d_report_pipeline import ReportPipeline, ReportPipelineConfig
 
-        monkeypatch.setattr(aggregate, "read_gold", lambda table: pl.DataFrame())
+        monkeypatch.setattr(d_report_pipeline, "read_gold", lambda table: pl.DataFrame())
 
         cfg = ReportPipelineConfig(output_dir=tmp_path)
         result = ReportPipeline(config=cfg).run()

@@ -64,3 +64,11 @@ class BronzePipeline:
         self.load(df)
         logger.info("BronzePipeline finished", extra={"rows": len(df)})
         return df
+
+
+if __name__ == "__main__":
+    result = BronzePipeline().run()
+    if not result.is_empty():
+        print(f"Bronze ingestion complete: {len(result)} rows")
+    else:
+        print("No data ingested.")
